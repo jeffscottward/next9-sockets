@@ -5,6 +5,10 @@ function dateReducer(state, action) {
       // Do something with action.payload
       state.time = action.payload;
       return { ...state };
+    case "MESSAGE_REQUEST":
+      // Do something with action.payload
+      state.test = action.payload;
+      return { ...state };
     default:
       return { ...state };
   }

@@ -15,13 +15,15 @@ const nextHandler = nextApp.getRequestHandler();
 io.on("connection", socket => {
   console.log("socket connection SERVER");
   // await new Promise(res => setTimeout(res, 1000));
-  socket.broadcast.emit("ping message", "PING");
+  // socket.broadcast.emit("ping message", "PING");
 
   socket.on("ping message", msg => {
+    console.log("PING FROM CLIENT");
     console.log("PONG GOING TO CLIENT");
     socket.broadcast.emit("pong message", "PONG");
   });
   socket.on("pong message", msg => {
+    console.log("PONG FROM CLIENT");
     console.log("PING GOING TO CLIENT");
     socket.broadcast.emit("ping message", "PING");
   });
