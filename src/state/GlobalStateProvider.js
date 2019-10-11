@@ -1,14 +1,14 @@
 import React, { createContext, useContext, useReducer } from "react";
 import MainReducer from "../state/MainReducer";
-export const StateContext = createContext();
+const StateContext = createContext();
 
-const GlobalInitialState = {
+const InitialState = {
   date: {},
   data: {}
 };
-
+// COMPONENT
 export const GlobalStateProvider = ({ children }) => (
-  <StateContext.Provider value={useReducer(MainReducer, GlobalInitialState)}>
+  <StateContext.Provider value={useReducer(MainReducer, InitialState)}>
     {children}
   </StateContext.Provider>
 );

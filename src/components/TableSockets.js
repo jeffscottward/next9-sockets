@@ -1,10 +1,11 @@
 import React, { useEffect } from "react"
 import getData from "../utils/getData";
-// import { useStateValue } from "../state/StateProvider";
-import SocketProvider, { useSocketValue, socketDispatch } from "../state/SocketProvider"
+import { useStateValue } from "../state/GlobalStateProvider";
+import SocketProvider, { useSocketValue } from "../state/SocketProvider"
 
 const SocketTest = () => {
-  const [{socket, socketData}, dispatch] = useSocketValue();
+  const [{socket}] = useSocketValue();
+  const [{data}, dispatch] = useStateValue();
 
   useEffect(() => {
     socket.on("connect", socket => {
@@ -15,14 +16,17 @@ const SocketTest = () => {
       console.log("MESG FROM SERVER");
       if (msg === "PONG") {
         console.log("HEARD A PONG");
+        dispatch({
+          type: "SOCKET_MESG",
+          payload: "PONG"
+        });
       }
     });
   }, [])
 
   const emitPing = async () => {
-    socketDispatch({
-      socketIO: socket,
-      dispatch: dispatch,
+    socket.emit("SOCKET_MESG", "PING");
+    dispatch({
       type: "SOCKET_MESG",
       payload: "PING"
     });
@@ -36,25 +40,12 @@ const SocketTest = () => {
 };
 
 const TableSockets = props => {
-  // const [{ date }, dispatch] = useStateValue()
-
-  // useEffect(() => {
-  //   async function getTime () {
-  //     let data = await getData("/api/time");  
-  //     data.time &&
-  //       dispatch({
-  //         type: "LAST_REQUEST_TIME",
-  //         payload: data.time
-  //       });
-  //   }
-  //   getTime()
-  // }, [])
-
+  const [{ data }] = useStateValue();
   return (
     <SocketProvider>
       <div>
         <h1>TableSockets.js</h1>
-        {/* <div>Last Request Time: {date && date.time}</div> */}
+        <div>Last Socket Message: {data.socketMesg}</div>
         <SocketTest />
         <style jsx>{`h1 {color: green;}`}</style>
       </div>
