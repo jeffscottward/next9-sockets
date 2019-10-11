@@ -1,71 +1,65 @@
-import React, { useEffect } from "react";
-import { get } from "axios";
-import io from "socket.io-client";
-const socket = io();
+import React, { useEffect } from "react"
+import getData from "../utils/getData";
+// import { useStateValue } from "../state/StateProvider";
+import SocketProvider, { useSocketValue, socketDispatch } from "../state/SocketProvider"
 
-import { useStateValue } from "../state/state";
+const SocketTest = () => {
+  const [{socket, socketData}, dispatch] = useSocketValue();
 
-      
+  useEffect(() => {
+    socket.on("connect", socket => {
+      console.log("socket connection CLIENT");
+    });
 
+    socket.on("SOCKET_MESG", msg => {
+      console.log("MESG FROM SERVER");
+      if (msg === "PONG") {
+        console.log("HEARD A PONG");
+      }
+    });
+  }, [])
 
-
-const TableSockets = props => {
-  const [{ date }, dispatch] = useStateValue();
-
-  
-
-  useEffect(() => {    
-    console.log("useEFFECT trigger");
-        
-    async function getData(url, params) {
-      let data = await get(url);
-      data.data.time && (
-        dispatch({
-          type: "LAST_REQUEST_TIME",
-          payload: data.data.time
-        })
-      )
-      data.data.test &&
-        dispatch({
-          type: "MESSAGE_REQUEST",
-          payload: data.data.test
-        });
-    }
-    // setInterval(() => {
-      getData("/api/time");  
-      getData("/api/message");
-    // }, 1000);
-    
-      socket.open()
-      socket.on("connection", socket => {
-        console.log("socket connection CLIENT");
-      });
-
-      socket.on("pong message", msg => {
-        console.log("PONG FROM SERVER");
-      });
-
-  }, []);
-
-
-
-  const emitPing = () => {
-    console.log("PING GOING TO SERVER");
-    socket.emit("ping message", "PING");
-  }
+  const emitPing = async () => {
+    socketDispatch({
+      socketIO: socket,
+      dispatch: dispatch,
+      type: "SOCKET_MESG",
+      payload: "PING"
+    });
+  };
 
   return (
-    <div>
-      <h1>TableSockets.js</h1>
-      Last Request Time: {date && date.time}
+    <div id="SocketTest">
       <button onClick={emitPing}>PING</button>
-      <style jsx>{`
-        h1 {
-          color: green;
-        }
-      `}</style>
     </div>
   );
 };
 
-export default TableSockets;
+const TableSockets = props => {
+  // const [{ date }, dispatch] = useStateValue()
+
+  // useEffect(() => {
+  //   async function getTime () {
+  //     let data = await getData("/api/time");  
+  //     data.time &&
+  //       dispatch({
+  //         type: "LAST_REQUEST_TIME",
+  //         payload: data.time
+  //       });
+  //   }
+  //   getTime()
+  // }, [])
+
+  return (
+    <SocketProvider>
+      <div>
+        <h1>TableSockets.js</h1>
+        {/* <div>Last Request Time: {date && date.time}</div> */}
+        <SocketTest />
+        <style jsx>{`h1 {color: green;}`}</style>
+      </div>
+    </SocketProvider>
+  );
+}
+
+export default TableSockets

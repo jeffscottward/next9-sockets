@@ -12,20 +12,15 @@ const dev = process.env.NODE_ENV !== "production";
 const nextApp = next({ dev });
 const nextHandler = nextApp.getRequestHandler();
 
-io.on("connection", socket => {
-  console.log("socket connection SERVER");
-  // await new Promise(res => setTimeout(res, 1000));
-  // socket.broadcast.emit("ping message", "PING");
+io.on("connect", socket => {
+  console.log("Socket Connection on SERVER");
 
-  socket.on("ping message", msg => {
-    console.log("PING FROM CLIENT");
-    console.log("PONG GOING TO CLIENT");
-    socket.broadcast.emit("pong message", "PONG");
-  });
-  socket.on("pong message", msg => {
-    console.log("PONG FROM CLIENT");
-    console.log("PING GOING TO CLIENT");
-    socket.broadcast.emit("ping message", "PING");
+  socket.on("SOCKET_MESG", msg => {
+    console.log("MESG FROM CLIENT");
+    if (msg === "PING") {
+      console.log("HEARD A PING");
+      socket.emit("SOCKET_MESG", "PONG");
+    }
   });
 });
 

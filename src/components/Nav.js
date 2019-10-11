@@ -1,7 +1,5 @@
 import React from "react";
-// import { useStateValue } from "../state/state";
 const Nav = props => {
-  // const [{ css }, dispatch] = useStateValue();
   return (
     <nav>
       <ul>

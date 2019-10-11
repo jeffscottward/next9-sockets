@@ -1,15 +1,11 @@
 import React from "react";
+import GlobalStateProvider from "../state/GlobalStateProvider";
 
 import Header from "../components/Header";
 import Main from "../components/Main";
-// import Footer from "../components/Footer";
-
-import { StateProvider } from "../state/state";
-import Reducer from "../state/reducer";
-import InitialState from "../state/initialState"
 
 const Layout = props => (
-  <StateProvider initialState={InitialState} reducer={Reducer}>
+  <GlobalStateProvider>
     <div id="Layout">
       <Header />
       <Main>{props.children}</Main>
@@ -88,7 +84,7 @@ const Layout = props => (
         grid-template-rows: auto 1fr auto;
       }
     `}</style>
-  </StateProvider>
+  </GlobalStateProvider>
 );
 
 export default Layout;
