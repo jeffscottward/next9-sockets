@@ -13,6 +13,6 @@ export const GlobalStateProvider = ({ children }) => (
   </StateContext.Provider>
 );
 
-export const useStateValue = () => useContext(StateContext);
+export const useGlobalStateValue = () => useContext(StateContext);
 
 export default GlobalStateProvider;

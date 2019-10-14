@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
-import { useStateValue } from "../state/GlobalStateProvider";
+import { useGlobalStateValue } from "../state/GlobalStateProvider";
 import getData from "../utils/getData"
 
 const SampleComponent = props => {
-  const [{ data }, dispatch] = useStateValue();
+  const [{ data }, dispatch] = useGlobalStateValue();
 
   useEffect(() => {
     async function getTime () {

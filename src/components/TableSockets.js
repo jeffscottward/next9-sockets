@@ -1,11 +1,11 @@
 import React, { useEffect } from "react"
 import getData from "../utils/getData";
-import { useStateValue } from "../state/GlobalStateProvider";
+import { useGlobalStateValue } from "../state/GlobalStateProvider";
 import SocketProvider, { useSocketValue } from "../state/SocketProvider"
 
 const SocketTest = () => {
   const [{socket}] = useSocketValue();
-  const [{data}, dispatch] = useStateValue();
+  const [{data}, dispatch] = useGlobalStateValue();
 
   useEffect(() => {
     socket.on("connect", socket => {
@@ -40,7 +40,7 @@ const SocketTest = () => {
 };
 
 const TableSockets = props => {
-  const [{ data }] = useStateValue();
+  const [{ data }] = useGlobalStateValue();
   return (
     <SocketProvider>
       <div>
